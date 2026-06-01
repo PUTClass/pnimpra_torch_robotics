@@ -60,78 +60,52 @@ def forward_kinematics(q, L):
 
 def batched_rotation(theta):
     """
-    Implement the batched version of the `rotation` function above.
+    TODO Implement the batched version of the `rotation` function above.
     theta: [T, K] angles in radians across T timesteps and K joints
     returns:
         R: [T, K, 2, 2] Rotation matrices 
     """
-    T, K = theta.shape
-    R = torch.empty(T, K, 2, 2)
 
-    c = torch.cos(theta)
-    s = torch.sin(theta)
 
-    R[..., 0, 0] = c
-    R[..., 0, 1] = -s
-    R[..., 1, 0] = s
-    R[..., 1, 1] = c
-
-    return R
+    return None
 
 def batched_forward_kinematics(q, L):
     """
-    Implement the batched version of the `forward_kinematics` function.
+    TODO Implement the batched version of the `forward_kinematics` function.
     q: [T, K] joint angles
     L: [K] link lengths
     returns:
         joint_pos: [T, K, 2] Positions of all joints over all timesteps
     """
-    # Cumulative sum along the joints axis (dim=1)
-    q_abs = torch.cumsum(q, dim=1)
+    
 
-    # Batched rotation matrices
-    R = batched_rotation(q_abs)
-    
-    # Local link vectors [K, 2]
-    p = torch.stack([L, torch.zeros_like(L)], dim=1)
-    
-    # Reshape p to broadcast over T axis and perform batched matmul
-    # R is [T, K, 2, 2], p.view is [1, K, 2, 1]
-    p_world = (R @ p.view(1, -1, 2, 1)).squeeze(-1)
-    
-    # Cumsum along the joints axis to add up world link vectors
-    joint_pos = torch.cumsum(p_world, dim=1)
-
-    return joint_pos
+    return None
 
 # Link lengths for a 3-DOF robot
 L = torch.tensor([0.7, 0.5, 0.3])
-T_steps = 100
 
 # ---------------------------------------------------------
-# A set of joint angles
+# A set of joint angles TODO
 # ---------------------------------------------------------
-t = torch.linspace(0, 1, T_steps)
-q1 = torch.linspace(0, torch.pi/2, T_steps)
-q2 = torch.linspace(0, torch.pi/2, T_steps)
-q3 = (torch.pi/4) * torch.sin(2 * torch.pi * t) # Varies in [-pi/4, pi/4]
 
-q_batched = torch.stack([q1, q2, q3], dim=1)
+
+q_batched = None
 
 # ---------------------------------------------------------
-# Compute batched kinematics
+# Compute batched kinematics TODO
 # --------------------------------------------------------- 
 joint_pos_batched = batched_forward_kinematics(q_batched, L)
 
 # ---------------------------------------------------------
-# Calculate the total distance traveled by the end effector
+# Calculate the total distance traveled by the end effector TODO
 # ---------------------------------------------------------
-end_effector_pos = joint_pos_batched[:, -1, :] # Shape [T, 2]
+end_effector_pos = None
 
-# Calculate the sum of Euclidean distances between consecutive steps:
-diffs = end_effector_pos[1:] - end_effector_pos[:-1] # Differences between frames [T-1, 2]
-distances = torch.norm(diffs, dim=1)                 # Euclidean norm of differences [T-1]
-total_distance = distances.sum().item()
+# ---------------------------------------------------------
+# Calculate the sum of Euclidean distances between consecutive steps TODO
+# ---------------------------------------------------------
+
+total_distance = None
 print(f"Total distance traveled by the end effector: {total_distance:.4f}")
 
 # ==============================================================================

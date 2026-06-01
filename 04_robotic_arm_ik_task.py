@@ -74,24 +74,21 @@ L = torch.tensor(
 # ==============================================================================
 
 TARGET_POS = torch.tensor([1.0, 0.0])
-EPOCHS = 10000
-optimizer = torch.optim.SGD([q], lr=0.1)
+EPOCHS = 3000
+optimizer = torch.optim.SGD([q], lr=1.0)
 
 for e in range(EPOCHS):
     optimizer.zero_grad()
-    T, joint_pos = forward_kinematics(q, L)
     
     # 1. Target reaching loss
-    loss_target = ((joint_pos[-1] - TARGET_POS)**2).sum()
+    # loss = ... must be a scalar
     
-    # Total loss with a weighting factor (hyperparameter) for the smoothness terms
-    loss = loss_target
     
-    loss.backward()
+    # loss.backward()
     optimizer.step()
 
-    if e % 100 == 0:
-        print(f"Epoch {e} | Total: {loss.item():.4f}")
+    # if e % 100 == 0:
+    #     print(f"Epoch {e} | Total: {loss.item():.4f}")
 
 # ==============================================================================
 # VISUALIZATION
